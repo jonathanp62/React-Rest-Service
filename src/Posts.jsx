@@ -1,10 +1,9 @@
 {/*
-App.jsx 0.2.0   01/19/2024
-App.jsx 0.1.0   01/19/2024
+Posts.jsx   0.2.0   01/19/2024
 
 @author  Jonathan Parker
 @version 0.2.0
-@since   0.1.0
+@since   0.2.0
 
 MIT License
 
@@ -29,21 +28,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */}
 
-import {Footer} from "./Footer.jsx";
-import {Header} from "./Header.jsx";
-import {Posts} from "./Posts.jsx";
+import {useEffect, useState} from "react";
 
-import packageJson from "../package.json";
+import PropTypes from 'prop-types';
 
-export default function App() {
+export function Posts(props) {
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        fetch(props.url)
+            .then(response => response.json())
+            .then(posts => {
+                setPosts(posts);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }, []);
+
     return (
-        <>
-            <Header title={packageJson.appConfig.title} />
-            <Posts url={packageJson.appConfig.postsUrl} />
-            <Footer
-                title={packageJson.appConfig.title}
-                version={packageJson.version}
-            />
-        </>
+        <div>
+            {posts.map(post => {
+                return (
+                    <div key={post.id}>
+                        <h2>{post.title}</h2>
+                        <p>{post.body}</p>
+                    </div>
+                );
+            })}
+        </div>
     );
 }
+
+Posts.propTypes = {
+    url: PropTypes.string.isRequired,
+};

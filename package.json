@@ -1,6 +1,5 @@
 {
   "name": "rest-service",
-  "title": "REST Services",
   "private": true,
   "version": "0.2.0",
   "type": "module",
@@ -9,6 +8,10 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
+  },
+  "appConfig": {
+    "postsUrl": "https://jsonplaceholder.typicode.com/posts?_limit=10",
+    "title": "REST Services"
   },
   "dependencies": {
     "prop-types": "^15.8.1",
