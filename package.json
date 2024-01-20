@@ -1,7 +1,7 @@
 {
   "name": "rest-service",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "appConfig": {
-    "postsUrl": "https://jsonplaceholder.typicode.com/posts?_limit=10",
+    "postsGetUrl": "https://jsonplaceholder.typicode.com/posts?_limit=10",
+    "postsPostUrl": "https://jsonplaceholder.typicode.com/posts",
     "title": "REST Services"
   },
   "dependencies": {

@@ -1,8 +1,9 @@
 {/*
+Posts.jsx   0.3.0   01/20/2024
 Posts.jsx   0.2.0   01/19/2024
 
 @author  Jonathan Parker
-@version 0.2.0
+@version 0.3.0
 @since   0.2.0
 
 MIT License
@@ -33,33 +34,94 @@ import {useEffect, useState} from "react";
 import PropTypes from 'prop-types';
 
 export function Posts(props) {
+    const [title, setTitle] = useState("");
+    const [body, setBody] = useState("");
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        fetch(props.url)
-            .then(response => response.json())
-            .then(posts => {
-                setPosts(posts);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
+        fetchPosts()
+            .finally();
     }, []);
+
+    const fetchPosts = async () => {
+        try {
+            const response = await fetch(props.getUrl);
+            const posts = await response.json();
+
+            setPosts(posts);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const addPosts = async (title, body) => {
+        try {
+            const response = await fetch(props.postUrl, {
+                method: 'POST',
+                body: JSON.stringify({
+                    title: title,
+                    body: body,
+                    userId: Math.random().toString(36).slice(2),
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            });
+
+            const data = await response.json();
+
+            setPosts((posts) => [data, ...posts]);
+            setTitle('');
+            setBody('');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        addPosts(title, body)
+            .finally();
+    };
 
     return (
         <div>
-            {posts.map(post => {
-                return (
-                    <div key={post.id}>
-                        <h2>{post.title}</h2>
-                        <p>{post.body}</p>
-                    </div>
-                );
-            })}
+            <div>
+                <form onSubmit={handleSubmit}>
+                    <input type="text"
+                           value={title}
+                           onChange={e => setTitle(e.target.value)}
+                    />
+                    <textarea name=""
+                              id=""
+                              cols="10"
+                              rows="8"
+                              value={body}
+                              onChange={e => setBody(e.target.value)}
+                    />
+                    <button type="submit">Add Post</button>
+                </form>
+            </div>
+            <div>
+                {posts.map(post => {
+                    return (
+                        <div key={post.id}>
+                            <hr />
+                            <h2>{post.title}</h2>
+                            <p>{post.body}</p>
+                            <div>
+                                <button>Delete</button>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }
 
 Posts.propTypes = {
-    url: PropTypes.string.isRequired,
+    getUrl: PropTypes.string.isRequired,
+    postUrl: PropTypes.string.isRequired,
 };

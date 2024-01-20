@@ -1,9 +1,10 @@
 {/*
+App.jsx 0.3.0   01/20/2024
 App.jsx 0.2.0   01/19/2024
 App.jsx 0.1.0   01/19/2024
 
 @author  Jonathan Parker
-@version 0.2.0
+@version 0.3.0
 @since   0.1.0
 
 MIT License
@@ -39,7 +40,10 @@ export default function App() {
     return (
         <>
             <Header title={packageJson.appConfig.title} />
-            <Posts url={packageJson.appConfig.postsUrl} />
+            <Posts
+                getUrl={packageJson.appConfig.postsGetUrl}
+                postUrl={packageJson.appConfig.postsPostUrl}
+            />
             <Footer
                 title={packageJson.appConfig.title}
                 version={packageJson.version}
