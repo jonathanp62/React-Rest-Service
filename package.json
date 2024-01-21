@@ -12,6 +12,7 @@
   "appConfig": {
     "postsGetUrl": "https://jsonplaceholder.typicode.com/posts?_limit=10",
     "postsPostUrl": "https://jsonplaceholder.typicode.com/posts",
+    "postsDeleteUrl": "https://jsonplaceholder.typicode.com/posts",
     "title": "REST Services"
   },
   "dependencies": {

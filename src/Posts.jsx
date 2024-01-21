@@ -1,33 +1,33 @@
 {/*
-Posts.jsx   0.3.0   01/20/2024
-Posts.jsx   0.2.0   01/19/2024
-
-@author  Jonathan Parker
-@version 0.3.0
-@since   0.2.0
-
-MIT License
-
-Copyright (c) 2024 Jonathan M. Parker
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/}
+  * (#)Posts.jsx   0.3.0   01/20/2024
+  * (#)Posts.jsx   0.2.0   01/19/2024
+  *
+  * @author  Jonathan Parker
+  * @version 0.3.0
+  * @since   0.2.0
+  *
+  * MIT License
+  *
+  * Copyright (c) 2024 Jonathan M. Parker
+  *
+  * Permission is hereby granted, free of charge, to any person obtaining a copy
+  * of this software and associated documentation files (the "Software"), to deal
+  * in the Software without restriction, including without limitation the rights
+  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  * copies of the Software, and to permit persons to whom the Software is
+  * furnished to do so, subject to the following conditions:
+  *
+  * The above copyright notice and this permission notice shall be included in all
+  * copies or substantial portions of the Software.
+  *
+  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  * SOFTWARE.
+  */}
 
 import {useEffect, useState} from "react";
 
@@ -54,7 +54,7 @@ export function Posts(props) {
         }
     }
 
-    const addPosts = async (title, body) => {
+    const addPost = async (title, body) => {
         try {
             const response = await fetch(props.postUrl, {
                 method: 'POST',
@@ -78,10 +78,30 @@ export function Posts(props) {
         }
     };
 
+    const deletePost = async (id) => {
+        const url = `${props.deleteUrl}/${id}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'DELETE'
+            });
+
+            if (response.status === 200) {
+                setPosts(
+                    posts.filter(post => {
+                        return post.id !== id;
+                    })
+                );
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        addPosts(title, body)
+        addPost(title, body)
             .finally();
     };
 
@@ -111,7 +131,11 @@ export function Posts(props) {
                             <h2>{post.title}</h2>
                             <p>{post.body}</p>
                             <div>
-                                <button>Delete</button>
+                                <button
+                                    onClick={() => deletePost(post.id)}
+                                >
+                                Delete
+                                </button>
                             </div>
                         </div>
                     );
@@ -124,4 +148,5 @@ export function Posts(props) {
 Posts.propTypes = {
     getUrl: PropTypes.string.isRequired,
     postUrl: PropTypes.string.isRequired,
+    deleteUrl: PropTypes.string.isRequired,
 };
